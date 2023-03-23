@@ -1,59 +1,27 @@
-//
-// Created by SamHerts on 3/21/2023.
-//
-/*This source code copyrighted by Lazy Foo' Productions (2004-2022)
-and may not be redistributed without written permission.*/
 
-//Using SDL and standard IO
-#include <SDL.h>
+
+//Using SDL, SDL_image, standard IO, and strings
 #include <cstdio>
-
-//Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+#include "app/include/App_SDL.h"
+#include "game/include/TankEntity.h"
 
 int main( int argc, char* args[] )
 {
-    //The window we'll be rendering to
-    SDL_Window* window = nullptr;
+    App_SDL my_app("Bullet Tank v0.0.1", 640, 480);
+    TankEntity player_one{};
 
-    //The surface contained by the window
-    SDL_Surface* screenSurface = nullptr;
+    //Start up SDL and create window
+    my_app.initialize();
 
-    //Initialize SDL
-    if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-    {
-        printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-    }
-    else
-    {
-        //Create window
-        window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-        if( window == nullptr )
-        {
-            printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-        }
-        else
-        {
-            //Get window surface
-            screenSurface = SDL_GetWindowSurface( window );
+    player_one.texture = my_app.load_texture("assets/images/FourTank.png");
 
-            //Fill the surface white
-            SDL_FillRect( screenSurface, nullptr, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+    //Hack to get window to stay up
+    SDL_Event e; bool quit = false; while( quit == false ){ while( SDL_PollEvent( &e ) ){ if( e.type == SDL_QUIT ) quit = true; } }
 
-            //Update the surface
-            SDL_UpdateWindowSurface( window );
 
-            //Hack to get window to stay up
-            SDL_Event e; bool quit = false; while(!quit){ while( SDL_PollEvent(&e ) ){ if(e.type == SDL_QUIT ) quit = true; } }
-        }
-    }
 
-    //Destroy window
-    SDL_DestroyWindow( window );
-
-    //Quit SDL subsystems
-    SDL_Quit();
+    //Free resources and close SDL
+    my_app.clean_up();
 
     return 0;
 }
