@@ -5,12 +5,15 @@
 #ifndef BULLETTANK_TANKENTITY_H
 #define BULLETTANK_TANKENTITY_H
 
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 class TankEntity
 {
 public:
+    TankEntity(int x_position, int y_position);
+    ~TankEntity();
+
     int x_position;
     int y_position;
     SDL_Texture* texture;
